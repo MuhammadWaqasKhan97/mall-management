@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+	<link rel="icon" type="image/png" href="img/icon.ico"/>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="nav-side-menu">
+        <div class="brand brand-color">
+            <h4>Falcon Mart Panel</h4>
+
+            <span style='font-size:18px'>Accountant: <span style='display:inline;font-size:14px'>
+                    <%= accountant.name %></span></span>
+        </div>
+        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+        <div class="menu-list">
+            <ul id="menu-content" class="menu-content collapse out">
+
+                <li onClick="navigate('accounting_div')">
+                    <a>
+                        <i class="far fa-chart-bar"></i> Accounting
+                    </a>
+                </li>
+
+
+
+                <li onClick="navigate('settings_div')">
+                    <a>
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+            </ul>
+            <div class="text-center">
+                <a href="/logout" class="btn btn-warning">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="main">
+        <!---       settings_div        ------>
+        <div class="row" id="settings_div" style="display:none">
+            <div class="col-md-12">
+                <h3 class="comp-name text-center"> Settings
+                </h3>
+                <hr>
+                <div>
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label for="email" class="float-right">Old Password:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="password" class="form-control" placeholder="Enter Old Password" id="old_pwd">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label for="pwd" class="float-right">New Password:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="password" class="form-control" placeholder="Enter New password" id="pwd">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label for="pwd" class="float-right">Confirm Password:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="password" class="form-control" placeholder="Confirm password" id="pwd_2"
+                                onChange="check_pwd()">
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <div class="text-center">
+                        <button disabled id='pwd_btn' class="btn btn-primary" onClick="pwd_change(this)">Change
+                            Password</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!----      settings_div        ----------->
+
+
+        <!---       accounting_div        ------>
+        <div class="row" id="accounting_div">
+            <div class="col-md-12">
+                <h3 class="comp-name text-center"> Accounting
+                </h3>
+                <hr>
+                <!-- Nav pills -->
+                <ul class="nav nav-pills" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="pill" href="#rents_tab">Rents</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#expenses_tab">Expenses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#salaries_tab">Salaries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#report_tab">Report generate</a>
+                    </li>
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div id="rents_tab" class="container tab-pane active"><br>
+                        <h3 class="comp-name">Rents</h3>
+                        <table class="table table-light table-striped table-hover table-panel">
+                            <thead>
+                                <tr class="table-info">
+                                    <th>Shop Name</th>
+                                    <th>Shop Number</th>
+                                    <th>Shop Rent</th>
+                                    <th>Last Paid</th>
+                                    <th>Months</th>
+                                </tr>
+                            </thead>
+                            <tbody id='rent_table'>
+                                <% let date= new Date().getTime(); shops.forEach((shop)=>{ if( parseInt(shop.approved_flag)!==0 && ((parseInt(shop.last_paid)+(30*86400*1000))<date)){ %>
+                                <tr id='<%= shop._id %>'>
+                                    <th>
+                                        <%= shop.name %>
+                                    </th>
+                                    <td>
+                                        <%= shop.shop_number %>
+                                    </td>
+                                    <td>
+                                        <%= shop.rent %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(parseInt(shop.last_paid)) %>
+                                    </td>
+                                    <td><input type='number' value='0' min='0' max='36' class='form-control' onChange='generate_rent_table()' /></td>
+                                </tr>
+                                <%  }}) %>
+                            </tbody>
+                        </table>
+                        <br>
+
+                    </div>
+                    <div id="expenses_tab" class="container tab-pane fade"><br>
+                        <h3 class="comp-name">Expenses</h3>
+                        <hr>
+                        <div class='form-inline'>
+                            <input class='form-control' id='title' placeholder='title'>
+                            <input class='form-control' id='expense' placeholder='Expense(pkr)'>
+                            <input class='form-control' id='person' placeholder='person name'>
+                            <button style='font-weight:800;font-size:20px' onClick='expense_add()'>+</button>
+
+                        </div>
+                        <br>
+                        <table class='table table-light table-striped table-panel table-hover'>
+                            <thead>
+                                <tr class="table-info">
+                                    <th>Title</th>
+                                    <th>Expense</th>
+                                    <th>By(person name)</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id='expense_table'>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="salaries_tab" class="container tab-pane "><br>
+                        <h3 class="comp-name">Salaries</h3>
+                        <table class="table table-light table-striped table-hover table-panel">
+                            <thead>
+                                <tr class="table-info">
+                                    <th>Employee Name</th>
+                                    <th>Employee Role</th>
+                                    <th>Salary</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id='employees_table'>
+                                <%  employees.forEach((employee)=>{ %>
+                                <tr id='<%= employee._id %>'>
+                                    <th>
+                                        <%= employee.name %>
+                                    </th>
+                                    <td>
+                                        <%= employee.role %>
+                                    </td>
+                                    <td>
+                                        <%= parseInt(employee.salary) %>
+                                    </td>
+                                    <td><input type='hidden' id='<%= employee._id %>_input' value='not_paid' /><button
+                                            style='color:green' onClick='paid(this)'>Paid</button><button style='color:red'
+                                            onClick='not_paid(this)'>Not paid</button></td>
+                                </tr>
+                                <%  }) %>
+                            </tbody>
+                        </table>
+                        <br>
+
+                    </div>
+
+                    <div id="report_tab" class="container tab-pane fade"><br>
+                        <h3>Report</h3>
+                        <hr>
+                        <div class='container'>
+                            <h4 class="comp-name">Rents</h4>
+                            <hr>
+                            <table class='table table-light table-hover table-panel table-striped'>
+                                <thead>
+                                    <tr>
+                                        <th>Shop Name</th>
+                                        <th>Monthly Rent</th>
+                                        <th>how many months?</th>
+                                        <th>Total Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='rent_table_g'>
+                                </tbody>
+                            </table>
+                            <p style='color:blue;font-size:18px;font-weight:600'>Total Rent(pkr): <span id='g_total_rents'>0</span></p>
+
+                            <hr>
+                            <h4 class="comp-name">Expenses</h4>
+                            <hr>
+                            <table class='table table-light table-hover table-panel table-striped'>
+                                <thead>
+                                    <tr class="table-info">
+                                        <th>Title</th>
+                                        <th>Expense(pkr)</th>
+                                        <th>Spent by(Person)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='expense_table_g'>
+                                </tbody>
+                            </table>
+                            <p style='color:red;font-size:18px;font-weight:600'>Total Expenses(pkr): <span id='g_total_expenses'>0</span></p>
+                            <hr>
+                            <p style='color:red;font-size:18px;font-weight:600'>Salaries (pkr): <span id='salaries'>0</span></p>
+                            <hr>
+                            <p style='color:green;font-size:18px;font-weight:600'>Net Profit/loss(pkr): <span id='net'>0</span></p>
+                            <button class='btn btn-success' onclick='generate_report()'>Generate Report</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!----      accounting_div        ----------->
+        <!---       reports_div        ------>
+        <div class="row" id="reports_div" style="display:none">
+            <div class="col-md-12">
+                <h3> <i class="far fa-chart-bar"></i> Reports
+                </h3>
+                <hr>
+
+            </div>
+        </div>
+
+        <!----      reports_div        ----------->
+
+
+        <div>
+</body>
+<script>
+    var g_salaries = 0
+
+
+    function check_pwd() {
+        if (document.getElementById("pwd").value !== document.getElementById("pwd_2").value) {
+            alert('password does not match');
+            document.getElementById('pwd_btn').disabled = true;
+        }
+        else {
+            document.getElementById('pwd_btn').disabled = false;
+
+        }
+    }
+
+
+    function pwd_change(e) {
+        e.disabled = true;
+        let pwd_old = document.getElementById("old_pwd").value;
+        let pwd_new = document.getElementById("pwd").value;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                e.disabled = false;
+
+                let success = JSON.parse(this.responseText).success;
+                if (success) {
+                    alert("Password changed successfully");
+                }
+                else {
+                    alert("You typed wrong credentials");
+                }
+            }
+        };
+        xhttp.open("POST", "/accountant/settings", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("pwd_old=" + pwd_old + "&pwd_new=" + pwd_new);
+
+    }
+    function search_shop() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("shop_q");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("shop_table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    function delete_shop(e) {
+        let row = e.parentNode.parentNode;
+        let id = e.id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let success = JSON.parse(this.responseText).success;
+                if (success) {
+                    row.style.display = "none";
+                }
+            }
+        };
+        xhttp.open("POST", "/shop/delete", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id=" + id);
+    }
+    function s_s_search_bill() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("s_s_bill_q");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("s_s_bill_table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    function s_s_search_doc() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("s_s_doc_q");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("s_s_doc_table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    function navigate(loc) {
+
+        document.getElementById("settings_div").style.display = "none";
+        document.getElementById("accounting_div").style.display = "none";
+
+
+        document.getElementById(loc).style.display = "block"
+
+    }
+    function generate_rent_table() {
+        let g_total = 0;
+        let str = ``, month, shop_name, rent, total;
+        let table = document.getElementById('rent_table');
+        let table_2 = document.getElementById('rent_table_g');
+        let tr = table.getElementsByTagName('tr');
+        for (let i = 0; i < tr.length; i++) {
+            // console.log(tr[i]);
+            month = parseInt(tr[i].getElementsByTagName('td')[3].getElementsByTagName('input')[0].value);
+            if (month !== 0) {
+                shop_name = tr[i].getElementsByTagName('th')[0].innerHTML;
+                rent = tr[i].getElementsByTagName('td')[1].innerHTML;
+                total = rent * month;
+                g_total += total;
+                str += `<tr><td>` + shop_name + `</td><td>` + rent + `</td><td>` + month + `</td><td>` + total + `</td></tr>`
+                console.log(i + "shop:" + shop_name + ",rent:" + rent);
+            }
+        }
+        document.getElementById('g_total_rents').innerHTML = g_total;
+        document.getElementById('net').innerHTML = parseInt(document.getElementById('g_total_rents').innerHTML) - parseInt(document.getElementById('g_total_expenses').innerHTML) - parseInt(document.getElementById('salaries').innerHTML);
+        table_2.innerHTML = str;
+
+    }
+    function expense_add() {
+        let table = document.getElementById('expense_table');
+        let title = document.getElementById('title');
+        let expense = document.getElementById('expense');
+        let person = document.getElementById('person');
+        let str = `<tr><td>` + title.value + `</td><td>` + expense.value + `</td><td>` + person.value + `</td><td><button class='btn btn-danger' onclick='remove(this)'>remove</button></td></tr>`
+        table.innerHTML += str;
+        title.value = "";
+        expense.value = "";
+        person.value = "";
+        expense_add_g();
+    }
+    function expense_add_g() {
+        let table = document.getElementById('expense_table');
+        let table_2 = document.getElementById('expense_table_g');
+        let str = ``;
+        let g_total = 0;
+        let tr = table.getElementsByTagName('tr');
+        for (let i = 0; i < tr.length; i++) {
+            str += `<tr><th>` + tr[i].getElementsByTagName('td')[0].innerHTML + `</th>
+  <td>`+ tr[i].getElementsByTagName('td')[1].innerHTML + `</td>
+  <td>`+ tr[i].getElementsByTagName('td')[2].innerHTML + `</td></tr>`
+            g_total += parseInt(tr[i].getElementsByTagName('td')[1].innerHTML);
+        }
+        table_2.innerHTML = str;
+        document.getElementById('g_total_expenses').innerHTML = g_total;
+        document.getElementById('net').innerHTML = parseInt(document.getElementById('g_total_rents').innerHTML) - parseInt(document.getElementById('g_total_expenses').innerHTML) - parseInt(document.getElementById('salaries').innerHTML);
+
+    };
+    function remove(e) {
+
+        let node = e.parentNode.parentNode;
+
+        e.parentNode.parentNode.parentNode.removeChild(node);
+        expense_add_g();
+    }
+    function local_csv() {
+        let dat_ = new Date().getTime();
+        let date = new Date(parseInt(dat_));
+        let csv_content = "data:text/csv;charset=utf-8,";
+        csv_content += "Report Generated on," + date + " \r\n";
+
+        csv_content += "Shop Rents \r\n";
+        csv_content += "--------------------------- \r\n";
+
+        csv_content += "Shop Name , Rent , Months , Total \r\n";
+        let shop_name, rent, month, total, title, expense, person;
+        let total_rent = document.getElementById('g_total_rents').innerHTML;
+        let total_expenses = document.getElementById('g_total_expenses').innerHTML;
+        let table_1 = document.getElementById('rent_table_g');
+        let tr_1 = table_1.getElementsByTagName('tr');
+        for (let i = 0; i < tr_1.length; i++) {
+            shop_name = tr_1[i].getElementsByTagName('td')[0].innerHTML;
+            rent = tr_1[i].getElementsByTagName('td')[1].innerHTML;
+            month = tr_1[i].getElementsByTagName('td')[2].innerHTML;
+            total = tr_1[i].getElementsByTagName('td')[3].innerHTML;
+            csv_content += shop_name + "," + rent + "," + month + "," + total + "\r\n";
+        }
+        csv_content += " \r\n";
+        csv_content += "Total Rent:," + total_rent + "\r\n";
+        csv_content += "-------------------------------- \r\n";
+        csv_content += " \r\n";
+        csv_content += "Salaries:," + g_salaries + "\r\n";
+        csv_content += "-------------------------------- \r\n";
+        csv_content += " \r\n";
+        csv_content += "Expenses \r\n";
+        csv_content += "Title, Expense, Person \r\n";
+
+        let table_2 = document.getElementById('expense_table_g');
+        let tr_2 = table_2.getElementsByTagName('tr');
+        for (let i = 0; i < tr_2.length; i++) {
+            title = tr_2[i].getElementsByTagName('th')[0].innerHTML;
+            expense = tr_2[i].getElementsByTagName('td')[0].innerHTML;
+            person = tr_2[i].getElementsByTagName('td')[1].innerHTML;
+            csv_content += title + "," + expense + "," + person + "\r\n";
+        }
+        csv_content += " \r\n";
+        csv_content += "Total Expenses," + total_expenses + "\r\n";
+        csv_content += "-------------------------------- \r\n";
+        csv_content += " \r\n";
+        csv_content += "Net," + (total_rent - total_expenses - g_salaries) + "\r\n";
+        let encodedUri = encodeURI(csv_content);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "report.csv");
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+    }
+    function paid(e) {
+        e.style.border = "2px solid green";
+        e.style.background = "cyan";
+        e.parentNode.getElementsByTagName('input')[0].value = "paid";
+        e.parentNode.getElementsByTagName("button")[1].style.border = "";
+        e.parentNode.getElementsByTagName("button")[1].style.background = "";
+        add_salaries();
+
+    }
+    function not_paid(e) {
+        e.style.border = "2px solid green";
+        e.style.background = "cyan";
+        e.parentNode.getElementsByTagName('input')[0].value = "not_paid";
+        e.parentNode.getElementsByTagName("button")[0].style.border = "";
+        e.parentNode.getElementsByTagName("button")[0].style.background = "";
+        add_salaries();
+
+    }
+    function add_salaries() {
+        var table = document.getElementById('employees_table');
+        var tr = table.getElementsByTagName('tr');
+        var salaries = 0, total = 0;
+        for (let i = 0; i < tr.length; i++) {
+            var status = tr[i].getElementsByTagName('td')[2].getElementsByTagName('input')[0].value;
+            if (status === "paid") {
+                console.log(i + status);
+                var salary = parseInt(tr[i].getElementsByTagName('td')[1].innerHTML);
+                salaries += salary;
+                total++;
+            }
+        }
+        g_salaries = salaries;
+        document.getElementById('salaries').innerHTML = g_salaries;
+        console.log('total :', total);
+        console.log('salaries:', salaries);
+        expense_add_g();
+    }
+
+    function generate_report() {
+        // csv for server
+        let rent_array = [];
+        let expense_array = [];
+        let table_1 = document.getElementById('rent_table_g');
+        let tr_1 = table_1.getElementsByTagName('tr');
+        for (let i = 0; i < tr_1.length; i++) {
+            rent_array.push([tr_1[i].getElementsByTagName('td')[0].innerHTML, tr_1[i].getElementsByTagName('td')[1].innerHTML,
+            tr_1[i].getElementsByTagName('td')[2].innerHTML, tr_1[i].getElementsByTagName('td')[3].innerHTML])
+        }
+        let table_2 = document.getElementById('expense_table_g');
+        let tr_2 = table_2.getElementsByTagName('tr');
+        for (let i = 0; i < tr_2.length; i++) {
+            expense_array.push([tr_2[i].getElementsByTagName('th')[0].innerHTML, tr_2[i].getElementsByTagName('td')[0].innerHTML, tr_2[i].getElementsByTagName('td')[1].innerHTML])
+        }
+
+        /// csv for server 
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+                local_csv();
+            }
+        };
+        let salaries = parseInt(document.getElementById('salaries').innerHTML);
+        xhttp.open("POST", "/accountant/report", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("rents=" + JSON.stringify(rent_array) + "&expenses=" + JSON.stringify(expense_array) + "&salaries=" + salaries);
+
+
+    }
+
+
+</script>
+<!-- <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script> -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+</html>

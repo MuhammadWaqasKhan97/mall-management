@@ -1,0 +1,117 @@
+.bg-img{
+    background: linear-gradient(
+        rgba(245,239,239, 0.5), 
+        rgba(245, 239, 239, 0.5)),
+     url("../img/1511.jpg");
+     animation: slide 60s linear infinite;
+    background-size: cover;
+    background-repeat: repeat;
+
+}
+.main-logo-cont{
+    background-color: #ffffff;
+    margin:0 auto;
+    margin-top: 13em;
+    width: 40%;
+    height: 400px;
+    padding-top: 4em;
+    border: 1px solid skyblue;
+    border-radius: 5px
+
+}
+@media (max-width:995px){
+    .main-logo-cont{
+        width: 50%;
+        height: 350px
+    }
+}
+
+@media (max-width:767px){
+    .main-logo-cont{
+        width: 80%;
+        height: 350px
+    }
+}
+.main-logo{
+    width: 400px;
+    height: 200px;
+    cursor: pointer;
+}
+
+.mic-bg-img{
+    background: url("../img/login_bg.png");
+    animation: slide 20s linear infinite;
+    background-size: cover;
+    background-repeat: repeat;
+}
+
+.fal-bg-img{
+    background: url("../img/1.jpg");
+    animation: slide 20s linear infinite;
+    background-size: cover;
+    background-repeat: repeat;
+}
+@keyframes slide {
+    from { background-position: 0 0; }
+    to { background-position: -400px 0; }
+}
+.login-form{
+    background-color: #ffffff;
+    padding-top: 15em;
+    height: 58em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+.login-fal-form{
+    background-color: #5e1a19;
+    padding-top: 15em;
+    height: 58em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+.lgn-logo{
+    width: 300px;
+}
+.input{
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+.lgn-btn{
+    background-color: #fd4f08 !important;
+    width: 20em;
+}
+.lgn-fal-btn{
+    background-color: #fcee8e;
+    width: 20em;
+}
+.login-text{
+    width: 60%;
+    color: white;
+    margin-top: 15em;
+    margin-left: 4em;
+}
+.login-text> h1{
+    margin-bottom: 1em;
+}
+.login-text > h6{
+    line-height: 1.5em;
+}
+.recognition{
+    color: white;
+    width: 60%;
+    margin-top: 14em;
+    margin-left: 4em;
+}
+
+.recognition-img{
+    width: 200px;
+}
+.rights{
+    position: relative;
+    margin-top: 1em;
+}
+
+.cus-active{
+    color: goldenrod !important;
+}

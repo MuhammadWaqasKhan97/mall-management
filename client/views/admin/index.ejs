@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Microchip pvt ltd</title>
+
+	<link rel="icon" type="image/png" href="img/icon.ico"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="nav-side-menu">
+    <div class="brand brand-color">
+      <h4>Microchip pvt. ltd.</h4>
+    </div>
+    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+    <div class="menu-list">
+      <ul id="menu-content" class="menu-content collapse out">
+        <li onClick="navigate('falcon_div')">
+          <a>
+            <i class="fas fa-stroopwafel"></i> Falcon Mart
+          </a>
+        </li>
+
+        <li onClick="navigate('notifications_div')">
+          <a>
+            <i class="far fa-bell"></i> Notification
+            <% let count = 0; for(let i=0;i<notifications.length;i++){  if( notifications[i].flag==="unread"){ count++ ;     }}  ;  if(count>0){ %>
+            <span class="badge badge-light">
+              <%= count %></span>
+            <%      } %>
+          </a>
+        </li>
+
+        <li onClick="navigate('reports_div')">
+          <a>
+            <i class="far fa-chart-bar"></i> Reports
+          </a>
+        </li>
+        <li onClick="navigate('employees_div')">
+          <a>
+            <i class="fas fa-users"></i>Microchip Employees
+          </a>
+        </li>
+        <li onClick="navigate('add_employees_div')">
+          <a>
+            <i class="fas fa-user-tie"></i> Add Employees
+          </a>
+        </li>
+        <li onClick="navigate('settings_div')">
+          <a>
+            <i class="fas fa-cog"></i> Settings
+          </a>
+        </li>
+        <div class="text-center log-out">
+          <a href="/logout" class="btn btn-warning">Logout</a>
+        </div>
+      </ul>
+
+    </div>
+  </div>
+  <div class="container" id="main">
+    <!---       add_employees_div        ------>
+    <div class="row" id="add_employees_div" style="display:none">
+      <div class="col-md-12">
+        <h3 class="comp-name text-center"> Add Employees
+        </h3>
+        <hr>
+        <form action="/admin/add_employee" method="POST" enctype="multipart/form-data">
+
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">Name:</label>
+            </div>
+            <div class="col-4">
+              <input type="text" class="form-control" placeholder="Enter Full Name" name="name">
+            </div>
+
+            <div class="col-2">
+              <label for="name" class="float-right">father Name:</label>
+            </div>
+            <div class="col-4">
+              <input type="text" class="form-control" placeholder="Enter Father Name" name="father_name">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">Email:</label>
+            </div>
+            <div class="col-10">
+              <input type="text" class="form-control" placeholder="Enter Email" name="email">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">Designation:</label>
+            </div>
+            <div class="col-10">
+              <select class="form-control" name="pos">
+                <option value='manager'>Manager</option>
+                <option value='accountant'>Accountant</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">Salary:</label>
+            </div>
+            <div class="col-10">
+              <input type='number' name='salary' class='form-control' />
+            </div>
+          </div>  
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">Address:</label>
+            </div>
+            <div class="col-10">
+              <input type="text" class="form-control" placeholder="Enter Address" name="address">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">Phone Number:</label>
+            </div>
+            <div class="col-10">
+              <input type="text" class="form-control" placeholder="Enter Phone number" name="phone">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="name" class="float-right">CNIC:</label>
+            </div>
+            <div class="col-10">
+              <input type="text" class="form-control" placeholder="Enter CNIC number" name="cnic">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-2">
+              <label for="file" class="float-right">Picture:</label>
+            </div>
+            <div class="col-10">
+              <input type="file" class="form-control-file" name="pic">
+            </div>
+          </div>
+
+
+          <br>
+          <div class="text-center">
+            <button class="btn btn-primary">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!----      add_employees_div        ----------->
+    <!---       notifications_div        ------>
+    <div class="row" id="notifications_div" style="display:none">
+      <div class="col-md-12">
+        <h1 class="comp-name text-center"> Notification
+        </h1>
+        <hr>
+        <% notifications.reverse().forEach((notification)=>{ if(notification.flag==="unread"){ %>
+        <div class="alert alert-success alert-dismissible" id='<%= notification._id %>'>
+          <button type="button" class="close" data-dismiss="alert" onClick='read(this.parentNode.id)'>&times;</button>
+          <strong>
+            <%= notification.title %></strong> <span>
+            <% let date=  new Date(parseInt(notification.date)); %>
+            <%= date %></span>
+          <p>
+            <%= notification.detail %>
+          </p>
+        </div>
+        <% }}) %>
+        <hr>
+        <h4 class="not-text">Old Notifications</h4>
+        <% notifications.forEach((notification)=>{ if(notification.flag!=="unread"){ %>
+        <div class="alert alert-primary alert-dismissible not-data" style="padding: 2em 3em;" id='<%= notification._id %>'>
+          <strong>
+            <%= notification.title %></strong> <span>
+            <% let date=  new Date(parseInt(notification.date)); %>
+            <%= date %></span>
+          <p>
+            <%= notification.detail %>
+          </p>
+        </div>
+        <% }}) %>
+      </div>
+    </div>
+
+    <!---       notifications_div        ------>
+    <!---       settings_div        ------>
+    <div class="row" id="settings_div" style="display:none">
+      <div class="col-md-12">
+        <h3 class="comp-name text-center"> Settings
+        </h3>
+        <hr>
+        <div>
+          <div class="form-group row">
+            <div class="col-3">
+              <label for="email" class="float-right">Old Password:</label>
+            </div>
+            <div class="col-8">
+              <input type="password" class="form-control" placeholder="Enter Old Password" id="old_pwd">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-3">
+              <label for="pwd" class="float-right">New Password:</label>
+            </div>
+            <div class="col-8">
+              <input type="password" class="form-control" placeholder="Enter New password" id="pwd">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-3 float-right">
+              <label for="pwd" class="float-right">Confirm Password:</label>
+            </div>
+            <div class="col-8">
+              <input type="password" class="form-control" placeholder="Confirm password" id="pwd_2" onChange="check_pwd()">
+            </div>
+          </div>
+
+          <br><br>
+          <div class="text-center">
+            <button disabled id='pwd_btn' class="btn btn-primary" onClick="pwd_change(this)">Change Password</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!----      settings_div        ----------->
+
+    <!----- falcon mart div  ---->
+    <div id='falcon_div'>
+      <div class="comp-name text-center">
+        <h3>FALCON MART</h3>
+      </div>
+      <hr>
+      <!-- Nav pills -->
+      <ul class="nav nav-pills" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="pill" href="#shops">SHOPS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#docs">RENTAL DOCS</a>
+        </li>
+
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content" id='falcon_body'>
+        <div id="shops" class="container tab-pane active"><br>
+          <h3 class="sub-head-text">All Shops</h3>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text search-text">Search By Title,Shop Name</span>
+            </div>
+            <input type="text" class="form-control search-text-box" placeholder="Title,Shop Name?" id='shop_q' onkeyup="search_shop()">
+          </div>
+          <table class="table thead-dark table-striped table-light table-hover table-panel">
+            <thead>
+              <tr class="table-info">
+                <th>Shop Name</th>
+                <th>Shop Owner</th>
+                <th>Shop Email</th>
+                <th>Phone Number</th>
+                <th>Need Approval</th>
+              </tr>
+            </thead>
+            <tbody id='shop_table'>
+              <% shops.forEach((shop)=>{ %>
+              <tr id='<%= shop._id %>'>
+                <td>
+                  <button onClick="get_shop(this.parentNode.parentNode.id)" style="min-width:11em; height:3em;" class='btn btn-primary'>
+                    <%= shop.name %>
+                  </button></td>
+                </td>
+                <td>
+                  <%= shop.owner_name %>
+                </td>
+                <td>
+                  <%= shop.email %>
+                </td>
+                <td>
+                  <%= shop.phone %>
+                </td>
+                <td>
+                  <% if( parseInt(shop.approved_flag)===0){ %>
+                  <a href="/shop/approve/<%= shop._id %>"><button>Approve</button></a>
+                  <% } %>
+
+                </td>
+              </tr>
+              <%  }) %>
+            </tbody>
+          </table>
+
+        </div>
+        <div id="docs" class="container tab-pane fade"><br>
+          <h3 class="sub-head-text">Rental Docs</h3>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text search-text">Search By Title,Shop Name</span>
+            </div>
+            <input type="text" class="form-control search-text-box" placeholder="Title,Shop Name?" id='doc_q' onkeyup="search_doc()">
+          </div>
+
+          <table class="table table-light table-striped table-hover table-panel">
+            <thead>
+              <tr class="table-info">
+                <th>Title</th>
+                <th>Upload Date</th>
+                <th>Shop Name</th>
+                <th>Download</th>
+
+              </tr>
+            </thead>
+            <tbody id='doc_table'>
+
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!----- falcon mart div  ---->
+    <!---       employees_div        ------>
+    <div id="employees_div" style='display:none'>
+      <h3 class="comp-name text-center"> Microchip Employees
+      </h3>
+
+      <hr>
+      <div id='employees_list' class='container-fluid'>
+      </div>
+    </div>
+    <!----      employees_div        ----------->
+    <!---       reports_div        ------>
+    <div id="reports_div" style='display:none'>
+      <h3 class="comp-name text-center"> Reports
+      </h3>
+
+      <hr>
+
+      <table class="table table-light table-striped table-hover table-panel">
+        <thead>
+          <tr class="table-info">
+            <th>Title</th>
+            <th>Upload Date</th>
+            <th>Download</th>
+
+          </tr>
+        </thead>
+        <tbody id='reports_table'>
+
+
+        </tbody>
+      </table>
+
+    </div>
+    <!----      employees_div        ----------->
+    <!-- The Modal -->
+    <div class='modal' id="specific_shop_div" role="dialog" style='display:none'>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style='border-width:2px;box-shadow:3px 5px 5px gray' role="document">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h3 class='modal-title comp-name text-center'><span id='specific_shop_name'></span></h3>
+
+            <button type="button" class="close" onClick="this.parentNode.parentNode.parentNode.parentNode.style.display='none'">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <h6>Rent Status : <span id='specific_shop_rent_status'></span><span style='float:right'><span>Rent(pkr):</span><span
+                  id='s_s_rent'></span></span></h6>
+            <h6>Last Paid:<span id='specific_last_paid' style='font-size:12px;font-weight:600'></span></h6>
+            <hr>
+            <ul class="nav nav-pills" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" data-toggle="pill" href="#s_s_docs">Docs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="pill" href="#s_s_notice">Send Notice</a>
+              </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div id="s_s_docs" class="container tab-pane active"><br>
+                <h3>Docs</h3>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text search-text">Search By Title,Shop Name</span>
+                  </div>
+                  <input type="text" class="form-control search-text-box" placeholder="Title,Shop Name?" id='s_s_doc_q'
+                    onkeyup="s_s_search_doc()">
+                </div>
+
+                <table class="table table-light table-striped table-hover table-panel">
+                  <thead>
+                    <tr class="table-info">
+                      <th>Title</th>
+                      <th>Upload Date</th>
+                      <th>Download</th>
+
+                    </tr>
+                  </thead>
+                  <tbody id='s_s_doc_table'>
+
+                  </tbody>
+                </table>
+              </div>
+              <div id="s_s_notice" class="container tab-pane fade"><br>
+                <h3>Send Notice</h3>
+                <div class='container-fluid'>
+                  <form action='/send_notice' method='POST'>
+                    <div class="row">
+                      <div class="col-8">
+                        <div class="form-group row">
+                          <div class="col-2">
+                            <label for="name">Title:</label>
+                          </div>
+                          <div class="col-10">
+                            <input type="text" class="form-control" placeholder="Enter Title" name="title">
+                            <input type='hidden' id='input_shop_id' name="shop_id">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-2">
+                            <label for="name">Detail:</label>
+                          </div>
+                          <div class="col-10">
+                            <textarea type="text" class="form-control" placeholder="Detailed Notice" name="detail">
+                                </textarea>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="text-center">
+                          <button class='btn btn-primary'>Send</button>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!--- tab panes --->
+
+
+          </div>
+
+          <!---- Modal body --->
+
+
+        </div>
+      </div>
+    </div>
+    <!---  modal --->
+
+    <div>
+</body>
+<script src='./js/admin.js'>
+
+</script>
+<!-- <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script> -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+  crossorigin="anonymous"></script>
+
+</html>
